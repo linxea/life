@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no"
+    />
+    <title>Life</title>
+    <meta name="description" content="A freaking simple life app" />
+    <meta name="keywords" content="Postgres, Knex, Express" />
+    <meta name="author" content="linxea" />
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <style>
+      body {
+        font-family: monospace;
+      }
+
+      h1,
+      p {
+        margin: 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: #607d8b;
+      }
+
+      a::before {
+        color: black;
+      }
+
+      #container {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+      }
+
+      #box {
+        width: 300px;
+        border: 1px solid black;
+        padding: 10px;
+        margin-top: -1px;
+        margin-left: -1px;
+      }
+
+      #day::before,
+      #woke_up_at::before,
+      #achievement::before,
+      #mood::before,
+      #exercise::before,
+      #youtube::before,
+      #slept_at::before {
+        padding-right: 10px;
+        font-weight: bold;
+      }
+
+      #day::before {
+        content: "Day";
+      }
+
+      #woke_up_at::before {
+        content: "Woke up at:";
+      }
+
+      #achievement::before {
+        content: "Achievement:";
+      }
+
+      #mood::before {
+        content: "Mood:";
+      }
+
+      #exercise::before {
+        content: "Exercise";
+      }
+
+      #youtube::before {
+        content: "Youtube:";
+      }
+
+      #slept_at::before {
+        content: "Slept at:";
+      }
+
+      header {
+        width: 100vw;
+        padding: 100px 0 50px;
+        font-size: 3rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>L.I.F.E</header>
+    <div id="container"></div>
+    <div style="display:none" id="box">
+      <h1 id="day"></h1>
+      <p id="woke_up_at"></p>
+      <p id="achievement"></p>
+      <p id="mood"></p>
+      <p id="exercise"></p>
+      <a id="youtube"></a>
+      <p id="slept_at"></p>
+    </div>
+    <script>
+      const container = document.getElementById("container");
+      const boxNode = document.getElementById("box");
+
+      fetch("/api/days")
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(jsonObject) {
+          cloneDaysIntoHTML(jsonObject);
+        });
+
+      function cloneDaysIntoHTML(jsonObject) {
+        jsonObject.map(function(day) {
+          const createdDate = new Date(day.created_at);
+          const wokeUpdDate = new Date(day.woke_up_at);
+          const sleptDate = new Date(day.slept_at);
+
+          const createdTime =
+            createdDate.getDate() + "/" + createdDate.getMonth();
+          const wokeupTime =
+            wokeUpdDate.getHours() + ":" + wokeUpdDate.getMinutes();
+          const sleptTime = sleptDate.getHours() + ":" + sleptDate.getMinutes();
+
+          const cloneBoxNode = boxNode.cloneNode(true);
+          cloneBoxNode.style.display = "block";
+          const childNode = cloneBoxNode.children;
+
+          const meh = "meh time";
+
+          childNode.day.innerHTML += createdTime;
+          childNode.woke_up_at.innerHTML +=
+            day.woke_up_at === null ? meh : wokeupTime;
+          childNode.achievement.innerHTML += day.achievement;
+          childNode.mood.innerHTML += day.mood;
+          childNode.exercise.innerHTML += day.exercise ? "Yup, fit af" : "Nope";
+          childNode.youtube.innerHTML += day.youtube_link;
+          childNode.youtube.href = day.youtube_link;
+          childNode.slept_at.innerHTML +=
+            day.slept_at === null ? meh : sleptDate;
+          container.appendChild(cloneBoxNode);
+        });
+      }
+    </script>
+  </body>
+</html>
