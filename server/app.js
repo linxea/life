@@ -4,6 +4,7 @@ const routes = require("./routes");
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set("port", PORT);
 app.use(routes);

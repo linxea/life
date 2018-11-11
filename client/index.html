@@ -14,6 +14,11 @@
     <style>
       body {
         font-family: monospace;
+        margin: 0;
+      }
+
+      div {
+        box-sizing: border-box;
       }
 
       h1,
@@ -33,12 +38,12 @@
       #container {
         display: flex;
         flex-flow: row wrap;
-        justify-content: center;
+        width: 100%;
       }
 
       #box {
-        width: 300px;
-        border: 1px solid black;
+        width: 100%;
+        font-size: 0.7rem;
         padding: 10px;
         margin-top: -1px;
         margin-left: -1px;
@@ -49,7 +54,7 @@
       #achievement::before,
       #mood::before,
       #exercise::before,
-      #youtube::before,
+      #demo_link::before,
       #slept_at::before {
         padding-right: 10px;
         font-weight: bold;
@@ -75,24 +80,275 @@
         content: "Exercise";
       }
 
-      #youtube::before {
-        content: "Youtube:";
+      #demo_link::before {
+        content: "Demo:";
       }
 
       #slept_at::before {
         content: "Slept at:";
       }
 
-      header {
-        width: 100vw;
-        padding: 100px 0 50px;
-        font-size: 3rem;
+      #demo_link {
+        display: block;
+        word-break: break-all;
+      }
+
+      .timeline {
+        display: block;
+        width: 100%;
+        height: 30px;
+        border: 1px solid #8e8e8ea6;
+        margin: 40px auto 40px;
+        padding: 0;
+      }
+
+      .life {
+        position: relative;
+        background-image: linear-gradient(
+          to right,
+          rgb(160, 255, 141),
+          rgb(251, 154, 174),
+          rgb(221, 168, 255),
+          rgb(159, 207, 255)
+        );
+        /*
+          Yo man, this is my estimated life expectancy
+          Omg Nas from Nas Daily is the same age as me
+        */
+        width: calc(26 / 85 * 100%);
+        height: 100%;
+        padding: 0;
+      }
+
+      .life::after {
+        /* Downloaded from https://giphy.com/stickers/originals-emoji-xUPGcgvoipFxRtpMl2 */
+        background: url(./heart.gif) no-repeat;
+        background-size: contain;
+        position: absolute;
+        right: -25px;
+        height: 50px;
+        width: 50px;
+        margin-top: -10px;
+        content: "";
+      }
+
+      form {
+        width: 90%;
+        max-width: 600px;
+        margin: 30px auto 50px;
+        font-size: 1rem;
+      }
+
+      form div {
+        display: flex;
+        padding-bottom: 2px;
+      }
+
+      label {
+        display: inline-block;
+        min-width: 150px;
+        font-size: 1rem;
+      }
+
+      input,
+      textarea,
+      button {
+        width: 100%;
+        font-size: 1rem;
+        font-family: monospace;
+        padding: 2px 3px;
+      }
+
+      button {
+        position: relative;
+        height: 50px;
+        margin-top: 20px;
+        background-image: linear-gradient(
+          to right,
+          rgb(160, 255, 141),
+          rgb(251, 154, 174),
+          rgb(221, 168, 255),
+          rgb(159, 207, 255)
+        );
+        box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        overflow: hidden;
+        opacity: 1;
+        transition: opacity 100ms ease-in-out;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      input[type="checkbox"] {
+        margin: 0;
+      }
+
+      ::placeholder {
+        color: #9e9e9e8a;
+      }
+
+      input,
+      textarea,
+      input[type="checkbox"],
+      button {
+        outline-color: #00bcd4;
+        border: 1px solid #bbbbbb;
+      }
+
+      @media (min-width: 640px) {
+        #box {
+          max-width: 295px;
+        }
+      }
+
+      .alert-wrapper {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 95%;
+        height: 100%;
+        max-width: 500px;
+        max-height: 230px;
+        margin: 30vh auto;
+        border: 1px solid;
+        background-color: lightgray;
+        border-left: 3px solid #eeeeee;
+        border-top: 3px solid #eeeeee;
+        border-right: 3px solid #5c5c5c;
+        border-bottom: 3px solid #525252;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 30px;
+        width: 100%;
+        background-color: rgb(2, 12, 123);
+        padding: 5px 5px 5px 10px;
+        color: lightgray;
+      }
+
+      .title {
+        display: flex;
+        align-items: center;
+      }
+
+      .title::before {
+        content: "";
+        background: url(./windows.png) no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+
+      .header::after {
+        content: "✕";
+        width: 20px;
+        height: 20px;
+        background-color: #b3b1b1;
+        color: #777272;
+        font-size: 0.8rem;
+        text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+        line-height: 1.3;
+        font-family: sans-serif;
+        font-weight: 100;
         text-align: center;
+        border-left: 1px solid #eeeeee;
+        border-top: 1px solid #eeeeee;
+        border-right: 1px solid #5c5c5c;
+        border-bottom: 1px solid #525252;
+        cursor: pointer;
+      }
+
+      .message {
+        padding: 30px 40px;
+        font-size: 1rem;
+        line-height: 2;
+      }
+
+      #button-alert {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 10%;
+        height: 35px;
+        width: 200px;
+        margin: 0 auto;
+        background-color: lightgray;
+        border-left: 2px solid #eeeeee;
+        border-top: 2px solid #eeeeee;
+        border-right: 2px solid #5c5c5c;
+        border-bottom: 2px solid #525252;
+        box-shadow: 0 1px 1px darkgrey;
+        text-shadow: 1px 1px 1px grey;
+        text-align: center;
+        font-size: 1.1rem;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      #button-alert:hover {
+        transform: translateY(2px);
+      }
+
+      #button-alert:active {
+        background-color: darkgrey;
       }
     </style>
   </head>
   <body>
-    <header>L.I.F.E</header>
+    <form id="form">
+      <div id="this-is-my-current-life">
+        <div class="timeline"><div class="life"></div></div>
+      </div>
+
+      <div>
+        <label>Woke up at:</label>
+        <input type="time" name="woke_up_at" value="06:00" />
+      </div>
+      <div>
+        <label>Achievement:</label>
+        <textarea
+          name="achievement"
+          placeholder="I did this amazing thing today."
+          required
+        ></textarea>
+      </div>
+      <div>
+        <label>Mood:</label>
+        <input type="text" name="mood" placeholder="amehzing" required />
+      </div>
+      <div>
+        <label>Exercise</label>
+        <input type="checkbox" name="exercise" value="true" />
+      </div>
+      <div>
+        <label>Demo:</label>
+        <input
+          type="text"
+          name="demo_link"
+          placeholder="https://demo_link.com"
+        />
+      </div>
+      <div>
+        <label>Slept up at:</label>
+        <input type="time" name="slept_at" value="00:00" />
+      </div>
+      <button id="button-submit">THAT'S FOR TODAY</button>
+    </form>
     <div id="container"></div>
     <div style="display:none" id="box">
       <h1 id="day"></h1>
@@ -100,51 +356,113 @@
       <p id="achievement"></p>
       <p id="mood"></p>
       <p id="exercise"></p>
-      <a id="youtube"></a>
+      <a id="demo_link" rel="noopener noreferrer" target="_blank"></a>
       <p id="slept_at"></p>
     </div>
+
+    <div id="alert" class="alert-wrapper" style="display: none">
+      <div class="container">
+        <div class="header"><div class="title">Windows 95 error</div></div>
+        <div id="alert-message" class="message">
+          Error message from the past coming back to haunt you.
+        </div>
+        <div id="button-alert">OK</div>
+      </div>
+    </div>
+
     <script>
       const container = document.getElementById("container");
       const boxNode = document.getElementById("box");
+      const alertElement = document.getElementById("alert");
+
+      // LOL, we can override alert, gonna do it for fun
+      // http://jsfiddle.net/vivekkt91/bds77/
+      window.alert = function(message) {
+        createCustomAlert(message);
+      };
 
       fetch("/api/days")
         .then(function(response) {
           return response.json();
         })
-        .then(function(jsonObject) {
-          cloneDaysIntoHTML(jsonObject);
+        .then(function(responseJSON) {
+          cloneDaysIntoHTML(responseJSON);
         });
 
-      function cloneDaysIntoHTML(jsonObject) {
-        jsonObject.map(function(day) {
-          const createdDate = new Date(day.created_at);
-          const wokeUpdDate = new Date(day.woke_up_at);
-          const sleptDate = new Date(day.slept_at);
+      function cloneDaysIntoHTML(responseJSON) {
+        responseJSON.map(function(day) {
+          const meh = "meh time";
 
-          const createdTime =
-            createdDate.getDate() + "/" + createdDate.getMonth();
-          const wokeupTime =
-            wokeUpdDate.getHours() + ":" + wokeUpdDate.getMinutes();
-          const sleptTime = sleptDate.getHours() + ":" + sleptDate.getMinutes();
+          // This will convert to local timezone, I think.
+          const createdDateLocal = new Date(day.created_at);
+
+          const date = createdDateLocal.getDate();
+          // WTS, I forgot that getMonth() starts from index 0.
+          const month = createdDateLocal.getMonth() + 1;
+          const dateLocal = date + "/" + month;
 
           const cloneBoxNode = boxNode.cloneNode(true);
           cloneBoxNode.style.display = "block";
           const childNode = cloneBoxNode.children;
 
-          const meh = "meh time";
-
-          childNode.day.innerHTML += createdTime;
+          childNode.day.innerHTML += dateLocal;
           childNode.woke_up_at.innerHTML +=
-            day.woke_up_at === null ? meh : wokeupTime;
+            day.woke_up_at === null ? meh : day.woke_up_at;
           childNode.achievement.innerHTML += day.achievement;
           childNode.mood.innerHTML += day.mood;
-          childNode.exercise.innerHTML += day.exercise ? "Yup, fit af" : "Nope";
-          childNode.youtube.innerHTML += day.youtube_link;
-          childNode.youtube.href = day.youtube_link;
+          childNode.exercise.innerHTML += day.exercise
+            ? "Yup, fit af"
+            : "Nope, I'm weak";
+          childNode.demo_link.innerHTML +=
+            day.demo_link.length > 0 ? day.demo_link : "Nothing";
+          childNode.demo_link.href = day.demo_link;
           childNode.slept_at.innerHTML +=
-            day.slept_at === null ? meh : sleptDate;
+            day.slept_at === null ? meh : day.slept_at;
           container.appendChild(cloneBoxNode);
         });
+      }
+
+      // Using form will redirect page to the URL in action="url",
+      // we don't want to refresh the page when calling API so
+      // here we are.
+      document
+        .getElementById("button-submit")
+        .addEventListener("click", function(event) {
+          // This prevents the ugly query from appearing on the URL
+          // E.g. /?woke_up_at=06%3A00&achievement=ugly
+          event.preventDefault();
+
+          const formElement = document.getElementById("form");
+          // First time using URLSearchParams, it's cool
+          const formData = new URLSearchParams(new FormData(formElement));
+          fetch("/api/day/submit", {
+            method: "POST",
+            body: formData
+          })
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(response) {
+              const message = response.message || response.error;
+              showPopup(message);
+            });
+        });
+
+      function showPopup(message) {
+        alert(message);
+      }
+
+      document
+        .getElementById("button-alert")
+        .addEventListener("click", function(event) {
+          alertElement.style.display = "none";
+        });
+
+      function createCustomAlert(message) {
+        const alertMessageElement = document.getElementById("alert-message");
+
+        alertElement.style.display = "block";
+        alertMessageElement.innerHTML = message;
       }
     </script>
   </body>
