@@ -26,12 +26,12 @@ class DayController {
           .status(400)
           .send({ error: "You've already submitted for today. 😏" });
       } else {
-        const why = await Day.query()
+        await Day.query()
           .allowInsert(
             "[woke_up_at, achievement, slept_at, mood, exercise, demo_link]"
           )
           .insertGraph(dayData);
-        console.log("-----why", why);
+
         // Return a random inspiration quote as a success message.
         // Just me being super extra. 😎
         const quotes = [
@@ -43,7 +43,10 @@ class DayController {
           "Do not pray for an easy life, pray for the strength to endure a difficult one. - Bruce Lee 💪"
         ];
         const randomIndex = Math.floor(Math.random() * quotes.length);
-        res.send({ message: quotes[randomIndex] });
+        res.send({
+          message:
+            `Well done! Here's a quote for you: <br/>` + quotes[randomIndex]
+        });
       }
     } catch (error) {
       console.log("MAYDAY ERROR INCOMING:", error);
