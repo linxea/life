@@ -375,8 +375,8 @@
       const boxNode = document.getElementById("box");
       const alertElement = document.getElementById("alert");
 
-      // LOL, we can override alert, gonna do it for fun
-      // http://jsfiddle.net/vivekkt91/bds77/
+      // LOL, we can override alert! Gonna do style it for fun
+      // This http://jsfiddle.net/vivekkt91/bds77/ inspired me.
       window.alert = function(message) {
         createCustomAlert(message);
       };
@@ -429,12 +429,22 @@
         .getElementById("button-submit")
         .addEventListener("click", function(event) {
           // This prevents the ugly query from appearing on the URL
+          // This also means we can't use the required field to validate form -.-
           // E.g. /?woke_up_at=06%3A00&achievement=ugly
           event.preventDefault();
 
           const formElement = document.getElementById("form");
+
+          if (!formElement.checkValidity()) {
+            showPopup(
+              "Are you sure you have entered something in Achievement and mood fields."
+            );
+            return;
+          }
+
           // First time using URLSearchParams, it's cool
           const formData = new URLSearchParams(new FormData(formElement));
+
           fetch("/api/day/submit", {
             method: "POST",
             body: formData
