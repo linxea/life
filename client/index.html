@@ -422,7 +422,7 @@
           childNode.demo_link.href = day.demo_link;
           childNode.slept_at.innerHTML +=
             day.slept_at === null ? meh : day.slept_at;
-          container.appendChild(cloneBoxNode);
+          container.insertBefore(cloneBoxNode, container.firstChild);
         });
       }
 
@@ -460,8 +460,8 @@
               const message = response.message || response.error;
               showPopup(message);
 
-              if (response.message) {
-                fetchDays();
+              if (response.data) {
+                cloneDaysIntoHTML(response.data);
               }
             });
         });
